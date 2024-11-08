@@ -1,0 +1,54 @@
+:root {
+    font-family: "DM Sans", sans-serif;
+
+    line-height: 1.5;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: #901C1C;
+    text-decoration: inherit;
+}
+
+a:hover {
+    color: #D3573C;
+}
+
+body {
+    margin: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 90px;
+}
+
+h1 {
+    color: #901C1C;
+    font-weight: 400;
+    margin-right: 100px;
+}
+
+.logo {
+    height: 50px;
+    margin-left: 100px;
+}
+
+.photographer_section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 70px;
+    margin-top: 100px;
+}
+
+.error {
+    color: #901C1C;
+}
