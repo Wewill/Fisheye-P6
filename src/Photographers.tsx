@@ -12,26 +12,6 @@ function Photographers() {
   const [state, setState] = useState<State>({loading:true});
 
   useEffect(() => {
-    // Version B 
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch('./data/photographers.json');
-    //     if (!response.ok) { 
-    //       throw new Error(`HTTP Error status: ${response.status}`);
-    //     }
-    //     //console.log(response);
-    //     const data:Data = await response.json();
-    //     setState({data, loading:false} );
-    //   } catch (error) {
-    //     setState({error: error instanceof Error ? error.message : "An error occurred", loading:false});
-    //   }
-    // };
-    // if ( initRef.current === false ) {
-    //   initRef.current = true;
-    //   fetchData();   
-    // };
-
-    // Version A 
     if ( initRef.current === true ) return;
     const fetchData = async () => {
       try {
