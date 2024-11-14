@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Data } from './types/data';
+import Link from "./components/link";
 
 type State = {
   data?: Data;
@@ -28,7 +29,7 @@ function Photographers() {
     };
     initRef.current = true;
     fetchData();   
-  }, []);  // Tableau de dépendances vide pour n’exécuter l’effet qu'une fois
+  }, []); // Tableau de dépendances vide pour n’exécuter l’effet qu'une fois après le rendu du composant
 
   if (state.loading) return <p>Chargement...</p>;
   if (state.error) return <p className='error'>Erreur: {state.error}</p>;
@@ -37,7 +38,8 @@ function Photographers() {
     <>
       {state.data?.photographers.map((photographer, index) => (
         <article className="card" key={photographer.id} tabIndex={index+1}>
-          <a aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>
+          <Link to="/photographer" aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>#LINK</Link>
+          <Link to="/photographer" params={{ photographerId : photographer.id }} aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>
             <img src={`./photographers/${photographer.portrait}`} alt={photographer.name} />
             <hgroup>
               <h2>{photographer.name}</h2>
@@ -45,7 +47,7 @@ function Photographers() {
               <p>{photographer.tagline}</p>
               <p className='muted'>{photographer.price}€/jour</p>
             </hgroup>
-          </a>
+          </Link>
         </article>
       ))}
     </>
