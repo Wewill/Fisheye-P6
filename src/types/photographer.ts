@@ -1,4 +1,4 @@
-// src/types/Photographer.d.ts
+// src/types/photographer.ts
 export interface Photographer {
     name: string;
     id: number;

@@ -1,4 +1,4 @@
-// src/types/Media.d.ts
+// src/types/media.ts
 export interface Media {
     id: number;
     photographerId: number;
@@ -9,4 +9,3 @@ export interface Media {
     date: string;
     price: number;
   }
-  
