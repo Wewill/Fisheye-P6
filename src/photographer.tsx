@@ -8,7 +8,11 @@ type State = {
   error?: string;
 }
 
-const Photographer = ({photographerId}) => {
+type Props = {
+  photographerId: number | null
+};
+
+const Photographer = ({photographerId}:Props) => {
     const initRef = useRef(false);
     const [state, setState] = useState<State>({loading:true});
   
@@ -20,7 +24,7 @@ const Photographer = ({photographerId}) => {
           if (!response.ok) { 
             throw new Error(`HTTP Error status: ${response.status}`);
           }
-          //console.log(response);
+          // console.log(response);
           const data:Data = await response.json();
           setState({data, loading:false} );
         } catch (error) {
@@ -35,30 +39,38 @@ const Photographer = ({photographerId}) => {
     if (state.error) return <p className='error'>Erreur: {state.error}</p>;
   
     return (
-        <article className="single photographer">
-            <p>Photographer ID: {photographerId}</p>
-            <Link to="/" aria-label="Retour à la liste des photographes" title="Retour à la liste des photographes">Retour</Link>
-            ----
-            <section className="hero">
-                <div className="">
-                    <div>
-                        <h2>Mimi keel</h2>
-                        <h5>{state.data?.photographers.findIndex((p) => p.id === photographerId)?.city}, {state.data?.photographers.findIndex((p) => p.id === photographerId)?.country}</h5>
-                        <p>{state.data?.photographers.findIndex((p) => p.id === photographerId)?.tagline}</p>
-                    </div>
-                    <button>Contactez-moi</button>
-                    <img src={`./photographers/${state.data?.photographers.findIndex((p) => p.id === photographerId)?.portrait}`} alt={state.data?.photographers.findIndex((p) => p.id === photographerId)?.name} />
-                </div>
+        <article>
+            <section className="photograph-header">
+              <div>
+                  <hgroup>
+                    <h2>Mimi keel</h2>
+                    <h4>{state.data?.photographers.find((p) => p.id === photographerId)?.city}, {state.data?.photographers.find((p) => p.id === photographerId)?.country}</h4>
+                    <p className='muted'>{state.data?.photographers.find((p) => p.id === photographerId)?.tagline}</p>
+                  </hgroup>
+              </div>
+              <button className='contact_button'>Contactez-moi</button>
+              <img src={`./photographers/${state.data?.photographers.find((p) => p.id === photographerId)?.portrait}`} alt={state.data?.photographers.find((p) => p.id === photographerId)?.name} />
             </section>
             #TODO Trier par...
-            {state.data?.media.filter((m) => m.photographerId === photographerId).map((media, index) => (
-                <figure>
-                    { media.title }
-                    { media.image }
-                    ...
-                </figure>
-            ))}
-        </article>
+            <section className='photograph-gallery'>
+              {state.data?.media.filter((m) => m.photographerId === photographerId).map((media, index) => (
+                  <figure tabIndex={index}>
+                      { ( () => { 
+                        if (media.image) return <img src={`./medias/${photographerId}/${media.image}`} alt={ media.title } />;
+                        if (media.video) return <video autoPlay loop><source src={`./medias/${photographerId}/${media.video}`} type="video/mp4"/></video>;
+                      } )() }                      
+                      <figcaption className='visually-hidden'>© {state.data?.photographers.find((p) => p.id === photographerId)?.name} — { media.title }</figcaption>
+                      <hgroup>
+                        <h4>{ media.title }</h4>
+                        <span>{ media.likes } <i className="fa fa-heart" aria-hidden="true"></i></span>
+                      </hgroup>
+                  </figure>
+              ))}
+            </section>
+            <div id='info_bar'>567567 <i className="fa fa-heart" aria-hidden="true"></i> 300€/jour</div>
+            <div id='contact_modal'>Contact</div>
+            <div id='lightbox_modal'>IMage</div>
+          </article>
    );
 };
 

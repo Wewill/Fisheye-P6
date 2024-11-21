@@ -20,7 +20,7 @@ function Photographers() {
         if (!response.ok) { 
           throw new Error(`HTTP Error status: ${response.status}`);
         }
-        //console.log(response);
+        // console.log(response);
         const data:Data = await response.json();
         setState({data, loading:false} );
       } catch (error) {
@@ -37,9 +37,8 @@ function Photographers() {
   return (
     <>
       {state.data?.photographers.map((photographer, index) => (
-        <article className="card" key={photographer.id} tabIndex={index+1}>
-          <Link to="/photographer" aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>#LINK</Link>
-          <Link to="/photographer" params={{ photographerId : photographer.id }} aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>
+        <article key={photographer.id} tabIndex={index+1}>
+          <Link to="/photographer" params={{ photographerId: photographer.id }} aria-label={`Voir le profil de ${photographer.name}`} title={`Voir le profil de ${photographer.name}`}>
             <img src={`./photographers/${photographer.portrait}`} alt={photographer.name} />
             <hgroup>
               <h2>{photographer.name}</h2>

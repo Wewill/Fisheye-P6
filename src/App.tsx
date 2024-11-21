@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Route from "./components/route";
 import Link from "./components/link";
 
@@ -13,18 +13,22 @@ import './css/photographers.css';
 import './css/photographer.css';
 
 function App() {
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    window.addEventListener('navigate', () => setCurrentPath(window.location.pathname));
+    return () => window.removeEventListener('navigate', () => setCurrentPath(window.location.pathname));
+  }, []);
+
   return (
     <>
-    <Link to="/">Vers home</Link>{ " | " }<Link to="/photographer">Vers photographer</Link>
       <header>
-          <img src={fisheyeLogo} className="logo" alt="Fisheye logo"/>
-          <h1>Nos photographes</h1>
-      </header>
+          <Link to="/"><img src={fisheyeLogo} className="logo" alt="Fisheye logo"/></Link>
+          { currentPath === '/' && <h1>Nos photographes</h1> }
+          </header>
       <main id="main">
-          <div className="photographer_section">
-          <Route path="/" component={Photographers} />
-          <Route path="/photographer" component={Photographer} />
-          </div>
+          <Route path="/" Component={Photographers} className="photographers_section" />
+          <Route path="/photographer" Component={Photographer} className="photographer_section" />
       </main>
     </>
   )
