@@ -23,7 +23,7 @@ function App() {
   return (
     <>
       <header>
-          <Link to="/"><img src={fisheyeLogo} className="logo" alt="Fisheye logo"/></Link>
+          <Link to="/"><img src={fisheyeLogo} className="logo" alt="Fisheye"/></Link>
           { currentPath === '/' && <h1>Nos photographes</h1> }
           </header>
       <main id="main">
