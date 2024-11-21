@@ -42,13 +42,48 @@ h1 {
     margin-left: 100px;
 }
 
-.photographer_section {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 70px;
-    margin-top: 100px;
-}
-
 .error {
     color: #901C1C;
+}
+
+.muted {
+    opacity: .6;
+}
+
+article a {
+    text-decoration: none;
+    text-align: center;
+}
+
+article p {
+    color: black;
+}
+
+article hgroup * {
+    margin: 0;
+}
+
+article h2 {
+    color: #D3573C;
+    font-weight: 400;
+    font-size: 36px;
+}
+
+article h4 {
+    color: #901C1C;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.visually-hidden {
+    position: absolute;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0,0,0,0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
