@@ -1,4 +1,6 @@
 // @src/components/Link.jsx
+import React from 'react';
+
 const toWithParams = (to = "", params = {}) => {
   const queryString = new URLSearchParams(params).toString();
   console.log('Link::', params, queryString);
@@ -6,7 +8,7 @@ const toWithParams = (to = "", params = {}) => {
 }
 
 const Link = ({ to = "", params = {}, children, ...props}) => {
-  const preventReload = (event) => {
+  const preventReload = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     window.history.pushState({}, "", toWithParams(to, params)); // https://developer.mozilla.org/en-US/docs/Web/API/History/pushState
     const navigationEvent = new PopStateEvent("navigate");
