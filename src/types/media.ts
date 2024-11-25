@@ -8,4 +8,4 @@ export interface Media {
     likes: number;
     date: string;
     price: number;
-  }
+}

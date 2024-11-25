@@ -1,8 +1,8 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 const BrowserRouterContext = createContext({
-  currentPath: window.location.pathname,
-  params: {} as {photographerId?: number},
+    currentPath: window.location.pathname,
+    params: {} as { photographerId?: number },
 });
 
 export default BrowserRouterContext;
