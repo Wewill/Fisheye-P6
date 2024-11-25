@@ -3,7 +3,7 @@
 }
 
 .photograph-header {
-    background-color: #FAFAFA;
+    background-color: #fafafa;
     /* height: 300px; */
     display: flex;
     flex-direction: row;
@@ -52,7 +52,8 @@
     line-height: 1;
 }
 
-.photograph-gallery figure img, .photograph-gallery figure video {
+.photograph-gallery figure img,
+.photograph-gallery figure video {
     border-radius: 10px;
     width: 100%;
     height: 250px;
@@ -71,7 +72,7 @@
     width: 170px;
     height: 70px;
     border: none;
-    background-color: #901C1C;
+    background-color: #901c1c;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -80,7 +81,7 @@
     position: fixed;
     bottom: 0;
     right: 100px;
-    background: #DB8876;
+    background: #db8876;
     padding: 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -90,7 +91,8 @@
 * Modal
 */
 
-#contact_modal, #lightbox_modal {
+#contact_modal,
+#lightbox_modal {
     position: fixed;
     display: flex;
     top: 0;
@@ -100,26 +102,28 @@
 
     opacity: 0;
     visibility: hidden; /* Remplace display:none; */
-    transition: opacity .2s ease-in-out, visibility .2s ease-in-out;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
 
 #lightbox_modal {
     background-color: white;
 }
 
-#contact_modal.hide, #lightbox_modal.hide {
+#contact_modal.hide,
+#lightbox_modal.hide {
     opacity: 0;
-    visibility: hidden; 
+    visibility: hidden;
 }
 
-#contact_modal.show, #lightbox_modal.show {
+#contact_modal.show,
+#lightbox_modal.show {
     opacity: 1;
     visibility: visible;
 }
 
 .modal {
     border-radius: 5px;
-    background-color: #DB8876;
+    background-color: #db8876;
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -148,29 +152,29 @@
 * Forms
 */
 
-    form {
-        display: flex;
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
-    form label {
-        color: #312E2E;
-        font-size: 36px;
-    }
+form label {
+    color: #312e2e;
+    font-size: 36px;
+}
 
-    form div {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: self-start;
-        margin-bottom: 26px;
-    }
+form div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: self-start;
+    margin-bottom: 26px;
+}
 
-    form input {
-        width: 100%;
-        height: 68px;
-        border: none;
-        border-radius: 5px;
-    }
+form input {
+    width: 100%;
+    height: 68px;
+    border: none;
+    border-radius: 5px;
+}
