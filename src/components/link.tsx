@@ -5,7 +5,7 @@ type Props = {
     to: string;
     params?: object;
     children: React.ReactNode;
-};
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const toWithParams = (to = '', params = {}) => {
     const queryString = new URLSearchParams(params).toString();
