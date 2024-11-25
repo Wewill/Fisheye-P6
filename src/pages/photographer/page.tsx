@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext, useId } from 'react';
 import { Data } from '@/types/data';
 import { Media } from '@/types/media';
 import BrowserRouterContext from '@/router/context';
+import Link from '@/components/link';
 
 type State = {
     data?: Data;
@@ -192,6 +193,16 @@ const Photographer = () => {
 
     if (state.loading) return <p>Chargement...</p>;
     if (state.error) return <p className="error">Erreur: {state.error}</p>;
+    if (!photographerId)
+        return (
+            <p className="error">
+                Oops il manque un identifiant de photographe
+                <br />
+                <strong>
+                    <Link to="/">Retour à la liste</Link>
+                </strong>
+            </p>
+        );
 
     const photographer = state.data?.photographers.find((p) => p.id === photographerId);
     const medias = state.data?.media || [];
