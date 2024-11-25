@@ -1,37 +1,38 @@
-import { useState, useEffect } from 'react';
 import Route from "./components/route";
 import Link from "./components/link";
+import useLocation from "./router/use-location";
 
-// Assets 
-import fisheyeLogo from './assets/images/logo.png';
-import Photographers from './photographers';
-import Photographer from './photographer';
+// Assets
+import fisheyeLogo from "./assets/images/logo.png";
+import Photographers from "./pages/photographers/page";
+import Photographer from "./pages/photographer/page";
 
 // Styles
-import './css/styles.css';
-import './css/photographers.css';
-import './css/photographer.css';
+import "./css/styles.css";
+import "./css/photographers.css";
+import "./css/photographer.css";
+import BrowserRouterContext from "./router/context";
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-
-  useEffect(() => {
-    window.addEventListener('navigate', () => setCurrentPath(window.location.pathname));
-    return () => window.removeEventListener('navigate', () => setCurrentPath(window.location.pathname));
-  }, []);
-
+  const state = useLocation();
   return (
-    <>
+    <BrowserRouterContext.Provider value={state}>
       <header>
-          <Link to="/"><img src={fisheyeLogo} className="logo" alt="Fisheye"/></Link>
-          { currentPath === '/' && <h1>Nos photographes</h1> }
-          </header>
+        <Link to="/">
+          <img src={fisheyeLogo} className="logo" alt="Fisheye" />
+        </Link>
+        {state.currentPath === "/" && <h1>Nos photographes</h1>}
+      </header>
       <main id="main">
-          <Route path="/" Component={Photographers} className="photographers_section" />
-          <Route path="/photographer" Component={Photographer} className="photographer_section" />
+        <Route path="/" className="photographers_section">
+          <Photographers></Photographers>
+        </Route>
+        <Route path="/photographer" className="photographer_section">
+          <Photographer></Photographer>
+        </Route>
       </main>
-    </>
-  )
+    </BrowserRouterContext.Provider>
+  );
 }
 
-export default App
+export default App;
