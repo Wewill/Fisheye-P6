@@ -296,8 +296,9 @@ const Photographer = () => {
                         <figure tabIndex={index} onClick={(event) => toggleLightboxModal(event, media.id)}>
                             {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
                             {media.video && (
-                                <video autoPlay loop>
+                                <video autoPlay loop poster="./src/assets/images/video.jpg">
                                     <source src={`./medias/${photographerId}/${media.video}`} type="video/mp4" />
+                                    Votre navigateur ne permet pas de lire les vidéos. Vous pouvez toujours <a href={`./medias/${photographerId}/${media.video}`}>la télécharger</a>
                                 </video>
                             )}
                             <figcaption className="visually-hidden">
@@ -313,8 +314,9 @@ const Photographer = () => {
                     ))}
             </section>
 
-            <div id="info_bar">
-                @todo 567567 <i className="fa fa-heart" aria-hidden="true"></i> 300€/jour
+            <div id="photograph-infobar">
+                {medias.reduce((a, i) => a + i.likes, 0)} <i className="fa fa-heart" aria-hidden="true"></i>
+                <span className="photograph-price">{photographer?.price}€ / jour</span>
             </div>
 
             {photographer && <ContactForm photographer={photographer} isOpen={modal.contact === true} onClose={toggleContactModal}></ContactForm>}
