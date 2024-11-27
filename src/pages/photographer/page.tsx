@@ -16,12 +16,32 @@ type modalState = {
     gallery_id?: number | null;
 };
 
-const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string }; isOpen: boolean; onClose: React.MouseEventHandler }) => {
+//@todo : mettre le focus sur close                 ex: $modalCloseBtn.focus()
+//@todo : mettre no scroll qd modal sur body        ex: $body.addClass('no-scroll')
+
+const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string }; isOpen: boolean; onClose: React.MouseEventHandler | undefined }) => {
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            // Close on ESC
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleKeyDown);
+        }
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
+
     return (
-        <div id="contact_modal" className={isOpen ? 'show' : 'hide'}>
+        <div id="contact_modal" className={isOpen ? 'show' : 'hide'} aria-hidden={isOpen ? 'false' : 'true'} role="dialog" aria-describedby="modalTitle">
             <div className="modal">
                 <header>
-                    <h3>Contactez-moi</h3>
+                    <h3 id="modalTitle">Contactez-moi</h3>
                     <h3>{photographer?.name}</h3>
                     <button className="close_button" onClick={onClose}>
                         <i className="fa fa-close" aria-hidden="true" title="Fermer"></i>
@@ -63,27 +83,59 @@ const Lightbox = ({
     media: Media[];
     isOpen: boolean;
     galleryId: number;
-    onClose: React.MouseEventHandler;
+    onClose: React.MouseEventHandler | undefined;
     setModal: React.Dispatch<React.SetStateAction<modalState>>;
 }) => {
     const { params } = useContext(BrowserRouterContext);
     const { photographerId } = params;
 
-    const jumpGalleryID = (event: React.MouseEvent<HTMLButtonElement>, index: number | null = 0, direction: number = -1) => {
-        event.preventDefault();
-        const p = media.filter((m) => m.photographerId === photographerId).findIndex((m) => m.id === index);
-        if (p !== undefined && p !== -1) {
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            // Close on ESC
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                onClose();
+            }
+
+            // Previous figure
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                jumpGalleryID(undefined, galleryId, -1);
+            }
+
+            // Next figure
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                jumpGalleryID(undefined, galleryId, 1);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('keydown', handleKeyDown);
+        }
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, onClose]);
+
+    const jumpGalleryID = (event: React.MouseEvent<HTMLButtonElement> | undefined, index: number | null = 0, direction: number = -1) => {
+        if (event) event.preventDefault();
+        const length = media.filter((m) => m.photographerId === photographerId).length;
+        const p = Number(media.filter((m) => m.photographerId === photographerId).findIndex((m) => m.id === index));
+        if (p !== undefined && direction === -1 && p === 0) onClose();
+        else if (p !== undefined && direction === 1 && p === length - 1) onClose();
+        else if (p !== undefined && p !== -1) {
             setModal((prevModal) => {
                 return {
                     ...prevModal,
                     gallery_id: media.filter((m) => m.photographerId === photographerId)[p + direction].id,
                 };
             });
-        }
+        } else onClose();
     };
     if (!galleryId) return null;
     return (
-        <div id="lightbox_modal" className={isOpen ? 'show' : 'hide'}>
+        <div id="lightbox_modal" className={isOpen ? 'show' : 'hide'} aria-hidden={isOpen ? 'false' : 'true'} role="dialog" aria-describedby="galleryTitle">
             Gallery id {galleryId}
             <button className="close_button" onClick={onClose}>
                 <i className="fa fa-close" aria-hidden="true" title="Fermer"></i>
@@ -102,7 +154,7 @@ const Lightbox = ({
                                     <source src={`./medias/${photographerId}/${media.video}`} type="video/mp4" />
                                 </video>
                             )}
-                            <figcaption className="--visually-hidden">
+                            <figcaption id="galleryTitle" className="--visually-hidden">
                                 © {photographer?.name} — {media.title}
                             </figcaption>
                         </figure>
@@ -127,15 +179,15 @@ const Photographer = () => {
     const { params } = useContext(BrowserRouterContext);
     const { photographerId } = params;
 
-    const toggleContactModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
+    const toggleContactModal = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
+        if (event) event.preventDefault();
         setModal((prevModal) => {
             return { ...prevModal, contact: !prevModal.contact };
         });
     };
 
-    const toggleLightboxModal = (event: React.MouseEvent<HTMLElement>, index: number = 0) => {
-        event.preventDefault();
+    const toggleLightboxModal = (event: React.MouseEvent<HTMLElement> | undefined, index: number = 0) => {
+        if (event) event.preventDefault();
         setModal((prevModal) => {
             return { ...prevModal, lightbox: !prevModal.lightbox, gallery_id: index };
         });
