@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useContext, useId } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useContext, useId } from 'react';
 import { Data } from '@/types/data';
 import { Media } from '@/types/media';
 import BrowserRouterContext from '@/router/context';
@@ -10,17 +10,10 @@ type State = {
     error?: string;
 };
 
-type modalState = {
-    contact: boolean;
-    lightbox: boolean;
-    gallery_id?: number | null;
-};
+const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string }; isOpen: boolean; onClose: () => void }) => {
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-//@todo : mettre le focus sur close                 ex: $modalCloseBtn.focus()
-//@todo : mettre no scroll qd modal sur body        ex: $body.addClass('no-scroll')
-
-const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string }; isOpen: boolean; onClose: React.MouseEventHandler | undefined }) => {
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             // Close on ESC
             if (event.key === 'Escape') {
@@ -30,12 +23,17 @@ const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?:
         };
 
         if (isOpen) {
+            setTimeout(() => {
+                closeButtonRef.current?.focus();
+            }, 100);
+            document.body.classList.add('no-scroll');
             document.addEventListener('keydown', handleKeyDown);
         }
         return () => {
+            document.body.classList.remove('no-scroll');
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [isOpen, onClose]);
+    }, [isOpen]); // onClose
 
     return (
         <div id="contact_modal" className={isOpen ? 'show' : 'hide'} aria-hidden={isOpen ? 'false' : 'true'} role="dialog" aria-describedby="modalTitle">
@@ -43,7 +41,7 @@ const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?:
                 <header>
                     <h3 id="modalTitle">Contactez-moi</h3>
                     <h3>{photographer?.name}</h3>
-                    <button className="close_button" onClick={onClose}>
+                    <button className="close_button" onClick={onClose} ref={closeButtonRef}>
                         <i className="fa fa-close" aria-hidden="true" title="Fermer"></i>
                     </button>
                 </header>
@@ -77,14 +75,14 @@ const Lightbox = ({
     isOpen,
     galleryId,
     onClose,
-    setModal,
+    onChange,
 }: {
     photographer: { name?: string };
     media: Media[];
     isOpen: boolean;
     galleryId: number;
-    onClose: React.MouseEventHandler | undefined;
-    setModal: React.Dispatch<React.SetStateAction<modalState>>;
+    onClose: () => void;
+    onChange: (galleryId: number) => void;
 }) => {
     const { params } = useContext(BrowserRouterContext);
     const { photographerId } = params;
@@ -125,12 +123,13 @@ const Lightbox = ({
         if (p !== undefined && direction === -1 && p === 0) onClose();
         else if (p !== undefined && direction === 1 && p === length - 1) onClose();
         else if (p !== undefined && p !== -1) {
-            setModal((prevModal) => {
-                return {
-                    ...prevModal,
-                    gallery_id: media.filter((m) => m.photographerId === photographerId)[p + direction].id,
-                };
-            });
+            // setModal((prevModal) => {
+            //     return {
+            //         ...prevModal,
+            //         gallery_id: media.filter((m) => m.photographerId === photographerId)[p + direction].id,
+            //     };
+            // });
+            onChange(media.filter((m) => m.photographerId === photographerId)[p + direction].id);
         } else onClose();
     };
     if (!galleryId) return null;
@@ -170,27 +169,20 @@ const Lightbox = ({
 const Photographer = () => {
     const initRef = useRef(false);
     const [state, setState] = useState<State>({ loading: true });
-    const [modal, setModal] = useState<modalState>({
-        contact: false,
-        lightbox: false,
-    });
-    const [selectedSort, setSelectedSort] = useState('popularity');
+    const [modal, setModal] = useState<null | 'contact' | 'lightbox'>(null);
+    const [galleryId, setGalleryId] = useState(0);
+    const [selectedSort, setSelectedSort] = useState('date');
 
     const { params } = useContext(BrowserRouterContext);
     const { photographerId } = params;
 
-    const toggleContactModal = (event: React.MouseEvent<HTMLButtonElement> | undefined) => {
-        if (event) event.preventDefault();
-        setModal((prevModal) => {
-            return { ...prevModal, contact: !prevModal.contact };
-        });
+    const openContactModal = () => {
+        setModal('contact');
     };
 
-    const toggleLightboxModal = (event: React.MouseEvent<HTMLElement> | undefined, index: number = 0) => {
-        if (event) event.preventDefault();
-        setModal((prevModal) => {
-            return { ...prevModal, lightbox: !prevModal.lightbox, gallery_id: index };
-        });
+    const openLightboxModal = (index: number = 0) => {
+        setModal('lightbox');
+        setGalleryId(index);
     };
 
     const sortSelectId = useId();
@@ -272,7 +264,7 @@ const Photographer = () => {
                         <p className="muted">{photographer?.tagline}</p>
                     </hgroup>
                 </div>
-                <button className="contact_button" onClick={toggleContactModal}>
+                <button className="contact_button" onClick={openContactModal}>
                     Contactez-moi
                 </button>
                 <img src={`./photographers/${photographer?.portrait}`} alt={photographer?.name} />
@@ -280,7 +272,7 @@ const Photographer = () => {
 
             <section className="photograph-filter">
                 <label htmlFor={sortSelectId}>Trier par</label>
-                <select id={sortSelectId} name="photograph-select" value={selectedSort} defaultValue="popularity" onChange={onSort}>
+                <select id={sortSelectId} name="photograph-select" defaultValue={selectedSort} onChange={onSort}>
                     {sortType.map(({ value, label }) => (
                         <option key={value} value={value}>
                             {label}
@@ -292,25 +284,28 @@ const Photographer = () => {
             <section className="photograph-gallery">
                 {sortedMedias
                     .filter((m) => m.photographerId === photographerId)
-                    .map((media, index) => (
-                        <figure tabIndex={index} onClick={(event) => toggleLightboxModal(event, media.id)}>
-                            {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
-                            {media.video && (
-                                <video autoPlay loop poster="./src/assets/images/video.jpg">
-                                    <source src={`./medias/${photographerId}/${media.video}`} type="video/mp4" />
-                                    Votre navigateur ne permet pas de lire les vidéos. Vous pouvez toujours <a href={`./medias/${photographerId}/${media.video}`}>la télécharger</a>
-                                </video>
-                            )}
-                            <figcaption className="visually-hidden">
-                                © {photographer?.name} — {media.title}
-                            </figcaption>
-                            <hgroup>
-                                <h4>{media.title}</h4>
-                                <span>
-                                    {media.likes} <i className="fa fa-heart" aria-hidden="true"></i>
-                                </span>
-                            </hgroup>
-                        </figure>
+                    .map((media) => (
+                        <button type="button" key={media.id} onClick={() => openLightboxModal(media.id)}>
+                            <figure>
+                                {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
+                                {media.video && (
+                                    <video autoPlay loop poster="./src/assets/images/video.jpg">
+                                        <source src={`./medias/${photographerId}/${media.video}`} type="video/mp4" />
+                                        Votre navigateur ne permet pas de lire les vidéos. Vous pouvez toujours{' '}
+                                        <a href={`./medias/${photographerId}/${media.video}`}>la télécharger</a>
+                                    </video>
+                                )}
+                                <figcaption className="visually-hidden">
+                                    © {photographer?.name} — {media.title}
+                                </figcaption>
+                                <hgroup>
+                                    <h4>{media.title}</h4>
+                                    <span>
+                                        {media.likes} <i className="fa fa-heart" aria-hidden="true"></i>
+                                    </span>
+                                </hgroup>
+                            </figure>
+                        </button>
                     ))}
             </section>
 
@@ -319,15 +314,15 @@ const Photographer = () => {
                 <span className="photograph-price">{photographer?.price}€ / jour</span>
             </div>
 
-            {photographer && <ContactForm photographer={photographer} isOpen={modal.contact === true} onClose={toggleContactModal}></ContactForm>}
-            {photographer && sortedMedias && modal.gallery_id && (
+            {photographer && <ContactForm photographer={photographer} isOpen={modal === 'contact'} onClose={() => setModal(null)}></ContactForm>}
+            {photographer && sortedMedias && galleryId && (
                 <Lightbox
                     photographer={photographer}
                     media={sortedMedias}
-                    isOpen={modal.lightbox === true}
-                    galleryId={modal.gallery_id}
-                    onClose={toggleLightboxModal}
-                    setModal={setModal}
+                    isOpen={modal === 'lightbox'}
+                    galleryId={galleryId}
+                    onClose={() => setModal(null)}
+                    onChange={(id) => setGalleryId(id)}
                 ></Lightbox>
             )}
         </article>
