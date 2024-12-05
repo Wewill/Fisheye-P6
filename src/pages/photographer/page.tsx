@@ -10,7 +10,7 @@ type State = {
     error?: string;
 };
 
-const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string }; isOpen: boolean; onClose: () => void }) => {
+const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string } | undefined; isOpen: boolean; onClose: () => void }) => {
     const closeButtonRef = useRef<HTMLButtonElement>(null);
 
     useLayoutEffect(() => {
@@ -77,7 +77,7 @@ const Lightbox = ({
     onClose,
     onChange,
 }: {
-    photographer: { name?: string };
+    photographer: { name?: string } | undefined;
     media: Media[];
     isOpen: boolean;
     galleryId: number;
@@ -120,8 +120,8 @@ const Lightbox = ({
         if (event) event.preventDefault();
         const length = media.filter((m) => m.photographerId === photographerId).length;
         const p = Number(media.filter((m) => m.photographerId === photographerId).findIndex((m) => m.id === index));
-        if (p !== undefined && direction === -1 && p === 0) onClose();
-        else if (p !== undefined && direction === 1 && p === length - 1) onClose();
+        if (p !== undefined && direction === -1 && p === 0) onChange(media.filter((m) => m.photographerId === photographerId)[length - 1].id);
+        else if (p !== undefined && direction === 1 && p === length - 1) onChange(media.filter((m) => m.photographerId === photographerId)[0].id);
         else if (p !== undefined && p !== -1) {
             // setModal((prevModal) => {
             //     return {
@@ -252,6 +252,19 @@ const Photographer = () => {
     const medias = state.data?.media || [];
     const sortedMedias = sortMedia(medias, selectedSort);
 
+    const incrementLikes = (mediaId: number) => {
+        setState((prevState) => {
+            if (!prevState.data) return prevState;
+            return {
+                ...prevState,
+                data: {
+                    ...prevState.data,
+                    media: prevState.data.media.map((m) => (m.id === mediaId ? { ...m, likes: m.likes + 1 } : m)),
+                },
+            };
+        });
+    };
+
     return (
         <article>
             <section className="photograph-header">
@@ -285,8 +298,8 @@ const Photographer = () => {
                 {sortedMedias
                     .filter((m) => m.photographerId === photographerId)
                     .map((media) => (
-                        <button type="button" key={media.id} onClick={() => openLightboxModal(media.id)}>
-                            <figure>
+                        <figure>
+                            <button type="button" key={media.id} onClick={() => openLightboxModal(media.id)}>
                                 {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
                                 {media.video && (
                                     <video autoPlay loop poster="./src/assets/images/video.jpg">
@@ -295,17 +308,21 @@ const Photographer = () => {
                                         <a href={`./medias/${photographerId}/${media.video}`}>la télécharger</a>
                                     </video>
                                 )}
-                                <figcaption className="visually-hidden">
-                                    © {photographer?.name} — {media.title}
-                                </figcaption>
-                                <hgroup>
+                            </button>
+                            <figcaption className="visually-hidden">
+                                © {photographer?.name} — {media.title}
+                            </figcaption>
+                            <hgroup>
+                                <button type="button" key={media.id} onClick={() => openLightboxModal(media.id)}>
                                     <h4>{media.title}</h4>
-                                    <span>
+                                </button>
+                                <button type="button" key={media.id} onClick={() => incrementLikes(media.id)}>
+                                    <span className="like">
                                         {media.likes} <i className="fa fa-heart" aria-hidden="true"></i>
                                     </span>
-                                </hgroup>
-                            </figure>
-                        </button>
+                                </button>
+                            </hgroup>
+                        </figure>
                     ))}
             </section>
 
@@ -314,17 +331,15 @@ const Photographer = () => {
                 <span className="photograph-price">{photographer?.price}€ / jour</span>
             </div>
 
-            {photographer && <ContactForm photographer={photographer} isOpen={modal === 'contact'} onClose={() => setModal(null)}></ContactForm>}
-            {photographer && sortedMedias && galleryId && (
-                <Lightbox
-                    photographer={photographer}
-                    media={sortedMedias}
-                    isOpen={modal === 'lightbox'}
-                    galleryId={galleryId}
-                    onClose={() => setModal(null)}
-                    onChange={(id) => setGalleryId(id)}
-                ></Lightbox>
-            )}
+            <ContactForm photographer={photographer} isOpen={modal === 'contact'} onClose={() => setModal(null)}></ContactForm>
+            <Lightbox
+                photographer={photographer}
+                media={sortedMedias}
+                isOpen={modal === 'lightbox'}
+                galleryId={galleryId}
+                onClose={() => setModal(null)}
+                onChange={(id) => setGalleryId(id)}
+            ></Lightbox>
         </article>
     );
 };
