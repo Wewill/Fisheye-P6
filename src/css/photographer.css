@@ -43,6 +43,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     margin-top: 5px;
 }
@@ -72,9 +73,94 @@
     width: 170px;
     height: 70px;
     border: none;
-    background-color: #901c1c;
+    background-color: var(--primary-color);
     border-radius: 5px;
     cursor: pointer;
+}
+
+.contact_button:hover {
+    background-color: var(--hover-color);
+}
+
+.photograph-filter {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    --button-width: 170px;
+}
+
+.photograph-filter label {
+    margin-right: 20px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.photograph-filter select {
+    margin-right: 20px;
+}
+
+.photograph-filter .select {
+    margin-right: 20px;
+    position: relative;
+}
+
+.photograph-filter .select i {
+    color: white;
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 18px;
+}
+
+.photograph-filter .select .select-button {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    padding: 14px;
+    padding-left: 20px;
+    height: 52px;
+    border: none;
+    background-color: var(--primary-color);
+    border-radius: 5px !important;
+    cursor: pointer;
+    text-align: left;
+
+    position: relative;
+    width: var(--button-width);
+}
+.photograph-filter .select .select-dropdown {
+    font-size: 18px;
+    font-weight: 700;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    margin: 0;
+    list-style: none;
+    border-radius: 5px;
+
+    position: absolute;
+    top: 0;
+    width: calc(var(--button-width) - 20px);
+}
+
+.photograph-filter .select .select-dropdown.show {
+    display: block;
+}
+.photograph-filter .select .select-dropdown.hide {
+    display: none;
+}
+
+.photograph-filter .select .select-dropdown li {
+    border-bottom: 1px solid white;
+    padding: 10px;
+}
+.photograph-filter .select .select-dropdown li:first-child {
+    padding-top: 4px;
+}
+.photograph-filter .select .select-dropdown li:last-child {
+    border: none;
+    padding-bottom: 4px;
 }
 
 #photograph-infobar {
@@ -85,11 +171,12 @@
     padding: 10px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    font-size: 24px;
+    font-weight: 500;
 }
 
 #photograph-infobar .photograph-price {
-    padding-left: 30px;
-    font-weight: bold;
+    padding-left: 50px;
 }
 
 /**
@@ -103,15 +190,54 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
 
     opacity: 0;
     visibility: hidden; /* Remplace display:none; */
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+
+    z-index: 200;
 }
 
 #lightbox_modal {
     background-color: white;
+}
+
+#lightbox_modal .lightbox_wrap {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0px;
+
+    height: calc(100vh - 80px);
+    margin: 40px 60px;
+}
+
+#lightbox_modal figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#lightbox_modal figure img,
+#lightbox_modal figure video {
+    height: calc(100vh - 80px);
+    max-width: 100%;
+
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center;
+    object-position: center;
+}
+
+#lightbox_modal figure figcaption {
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
 #contact_modal.hide,
@@ -124,6 +250,19 @@
 #lightbox_modal.show {
     opacity: 1;
     visibility: visible;
+}
+
+#lightbox_modal .previous_button,
+#lightbox_modal .next_button,
+#lightbox_modal .close_button {
+    color: var(--primary-color);
+    font-size: 32px;
+}
+
+#lightbox_modal .close_button {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .modal {
@@ -141,6 +280,7 @@
 .modal header {
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .modal header img {
@@ -175,6 +315,7 @@ form div {
     width: 100%;
     align-items: self-start;
     margin-bottom: 26px;
+    position: relative;
 }
 
 form input {
@@ -182,4 +323,17 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
+
+    font-size: 22px;
+    padding: 5px 10px;
+}
+
+form textarea {
+    width: 100% !important;
+    height: 120px;
+    border: none;
+    border-radius: 5px;
+
+    font-size: 22px;
+    padding: 5px 10px;
 }

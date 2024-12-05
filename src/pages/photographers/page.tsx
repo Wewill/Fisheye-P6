@@ -34,8 +34,18 @@ function Photographers() {
         fetchData();
     }, []); // Tableau de dépendances vide pour n’exécuter l’effet qu'une fois après le rendu du composant
 
-    if (state.loading) return <p>Chargement...</p>;
-    if (state.error) return <p className="error">Erreur: {state.error}</p>;
+    if (state.loading)
+        return (
+            <div className="flex-center">
+                <p className="loading">Chargement...</p>
+            </div>
+        );
+    if (state.error)
+        return (
+            <div className="flex-center">
+                <p className="error">Erreur: {state.error}</p>
+            </div>
+        );
 
     return (
         <>
