@@ -319,20 +319,24 @@ const Photographer = () => {
                 <div>
                     <hgroup>
                         <h2>{photographer?.name}</h2>
-                        <h4>
+                        <h4 aria-label="Ville, Pays : ">
                             {photographer?.city}, {photographer?.country}
                         </h4>
-                        <p className="muted">{photographer?.tagline}</p>
+                        <p className="muted" aria-label="Description : ">
+                            {photographer?.tagline}
+                        </p>
                     </hgroup>
                 </div>
-                <button className="contact_button" onClick={openContactModal}>
+                <button className="contact_button" onClick={openContactModal} aria-label="Contact Me">
                     Contactez-moi
                 </button>
                 <img src={`./photographers/${photographer?.portrait}`} alt={photographer?.name} />
             </section>
 
             <section className="photograph-filter">
-                <label htmlFor={sortSelectId}>Trier par</label>
+                <label id={'label-' + sortSelectId} htmlFor={sortSelectId}>
+                    Trier par
+                </label>
                 {/* <select id={sortSelectId} name="photograph-select" defaultValue={selectedSort} onChange={onSort}>
                     {sortType.map(({ value, label }) => (
                         <option key={value} value={value}>
@@ -346,15 +350,15 @@ const Photographer = () => {
                         className="select-button"
                         type="button"
                         role="listbox"
-                        aria-expanded="true"
+                        aria-expanded={dropdownOpen}
                         title="Bouton pour ouvrir le menu déroulant"
                         onClick={() => setDropdownOpen(true)}
                     >
                         {sortType.find((t) => t.value == selectedSort)?.label}
                     </button>
-                    <ul className={dropdownOpen ? 'select-dropdown show' : 'select-dropdown hide'}>
+                    <ul className={dropdownOpen ? 'select-dropdown show' : 'select-dropdown hide'} role="listbox">
                         {sortType.map(({ value, label }) => (
-                            <li className="item" key={value} onClick={() => onSort(value)}>
+                            <li className="item" aria-selected={selectedSort === value} key={value} onClick={() => onSort(value)} aria-labelledby={'label-' + sortSelectId}>
                                 {label}
                             </li>
                         ))}
@@ -367,7 +371,7 @@ const Photographer = () => {
                     .filter((m) => m.photographerId === photographerId)
                     .map((media) => (
                         <figure key={media.id}>
-                            <button type="button" onClick={() => openLightboxModal(media.id)}>
+                            <button type="button" onClick={() => openLightboxModal(media.id)} aria-label={'Voir en détail : ' + media.title}>
                                 {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
                                 {media.video && (
                                     <video autoPlay loop poster="./src/assets/images/video.jpg">
@@ -381,11 +385,11 @@ const Photographer = () => {
                                 © {photographer?.name} — {media.title}
                             </figcaption>
                             <hgroup>
-                                <button type="button" onClick={() => openLightboxModal(media.id)}>
+                                <button type="button" onClick={() => openLightboxModal(media.id)} aria-label={'Voir en détail : ' + media.title}>
                                     <h4>{media.title}</h4>
                                 </button>
-                                <button type="button" onClick={() => incrementLikes(media.id)}>
-                                    <span className="like">
+                                <button type="button" onClick={() => incrementLikes(media.id)} aria-label="Ajouter un like à la photo">
+                                    <span className="like" aria-label="Likes :">
                                         {media.likes} <i className="fa fa-heart" aria-hidden="true"></i>
                                     </span>
                                 </button>
@@ -396,7 +400,9 @@ const Photographer = () => {
 
             <div id="photograph-infobar">
                 {medias.reduce((a, i) => a + i.likes, 0)} <i className="fa fa-heart" aria-hidden="true"></i>
-                <span className="photograph-price">{photographer?.price}€ / jour</span>
+                <span className="photograph-price" aria-label="Tarif : ">
+                    {photographer?.price}€ / jour
+                </span>
             </div>
 
             <ContactForm photographer={photographer} isOpen={modal === 'contact'} onClose={() => setModal(null)}></ContactForm>

@@ -60,11 +60,13 @@ function Photographers() {
                         <img src={`./photographers/${photographer.portrait}`} alt={photographer.name} />
                         <hgroup>
                             <h2>{photographer.name}</h2>
-                            <h5>
+                            <h5 aria-label="Ville, Pays : ">
                                 {photographer.city}, {photographer.country}
                             </h5>
-                            <p>{photographer.tagline}</p>
-                            <p className="muted">{photographer.price}€/jour</p>
+                            <p aria-label="Description : ">{photographer.tagline}</p>
+                            <p className="muted" aria-label="Tarifs : ">
+                                {photographer.price}€/jour
+                            </p>
                         </hgroup>
                     </Link>
                 </article>

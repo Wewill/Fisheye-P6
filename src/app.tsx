@@ -19,7 +19,7 @@ function App() {
         <BrowserRouterContext.Provider value={state}>
             <header>
                 <Link to="/">
-                    <img src={fisheyeLogo} className="logo" alt="Fisheye" />
+                    <img src={fisheyeLogo} className="logo" alt="Fisheye Home page" />
                 </Link>
                 {state.currentPath === '/' && <h1>Nos photographes</h1>}
             </header>
