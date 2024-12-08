@@ -9,7 +9,7 @@ type Props = {
 
 const toWithParams = (to = '', params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    console.log('Link::', params, queryString);
+    // console.log('Link::', params, queryString);
     return queryString ? `${to}?${queryString}` : to;
 };
 

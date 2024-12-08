@@ -13,7 +13,7 @@ const useLocation = () => {
     React.useEffect(() => {
         // Set current path on location changes
         const onLocationChange = () => {
-            //console.log('onLocationChange::', window.location.pathname)
+            // console.log('onLocationChange::', window.location.pathname)
             setState({ currentPath: window.location.pathname, params: getQueryParams() });
         };
         // Add listener to window
