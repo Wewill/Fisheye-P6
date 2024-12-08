@@ -13,24 +13,9 @@ type State = {
 const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?: string } | undefined; isOpen: boolean; onClose: () => void }) => {
     const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-    // États pour les champs du formulaire
-    const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
-        email: '',
-        message: '',
-    });
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = event.target;
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    };
-
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        const formData = Object.fromEntries(new FormData(event.target as HTMLFormElement).entries());
         console.log('Form data:', formData);
     };
 
@@ -54,6 +39,7 @@ const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?:
             document.body.classList.remove('no-scroll');
             document.removeEventListener('keydown', handleKeyDown);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]); // onClose
 
     return (
@@ -71,19 +57,19 @@ const ContactForm = ({ photographer, isOpen, onClose }: { photographer: { name?:
                 <form onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="firstname">Prénom</label>
-                        <input type="text" name="firstname" id="firstname" value={formData.firstname} onChange={handleInputChange} />
+                        <input type="text" name="firstname" id="firstname" />
                     </div>
                     <div>
                         <label htmlFor="lastname">Nom</label>
-                        <input type="text" name="lastname" id="lastname" value={formData.lastname} onChange={handleInputChange} />
+                        <input type="text" name="lastname" id="lastname" />
                     </div>
                     <div>
                         <label htmlFor="email">Email</label>
-                        <input type="email" name="email" id="email" value={formData.email} onChange={handleInputChange} />
+                        <input type="email" name="email" id="email" />
                     </div>
                     <div>
                         <label htmlFor="message">Message</label>
-                        <textarea name="message" id="message" cols={30} rows={10} value={formData.message} onChange={handleInputChange}></textarea>
+                        <textarea name="message" id="message" cols={30} rows={10}></textarea>
                     </div>
                     <button type="submit" className="contact_button">
                         Envoyer
@@ -145,7 +131,8 @@ const Lightbox = ({
             document.body.classList.remove('no-scroll');
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, [isOpen, onClose]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [galleryId]); //onClose
 
     const jumpGalleryID = (event: React.MouseEvent<HTMLButtonElement> | undefined, index: number | null = 0, direction: number = -1) => {
         if (event) event.preventDefault();
@@ -154,12 +141,6 @@ const Lightbox = ({
         if (p !== undefined && direction === -1 && p === 0) onChange(media.filter((m) => m.photographerId === photographerId)[length - 1].id);
         else if (p !== undefined && direction === 1 && p === length - 1) onChange(media.filter((m) => m.photographerId === photographerId)[0].id);
         else if (p !== undefined && p !== -1) {
-            // setModal((prevModal) => {
-            //     return {
-            //         ...prevModal,
-            //         gallery_id: media.filter((m) => m.photographerId === photographerId)[p + direction].id,
-            //     };
-            // });
             onChange(media.filter((m) => m.photographerId === photographerId)[p + direction].id);
         } else onClose();
     };
@@ -206,6 +187,8 @@ const Photographer = () => {
     const [selectedSort, setSelectedSort] = useState('date');
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
+    const likeRef = useRef<Record<string, boolean>>({});
+
     const { params } = useContext(BrowserRouterContext);
     const { photographerId } = params;
 
@@ -232,13 +215,11 @@ const Photographer = () => {
     //     setSelectedSort(event.target.value);
     // };
     const onSort = (key: string) => {
-        console.log('Sort', event, key);
         setDropdownOpen(false);
         setSelectedSort(key);
     };
 
     const sortMedia = (medias: Media[], key: string): Media[] => {
-        console.log(sortMedia, medias, key);
         return medias.slice().sort((a, b) => {
             if (key === 'title') {
                 return a.title.localeCompare(b.title);
@@ -303,14 +284,16 @@ const Photographer = () => {
     const incrementLikes = (mediaId: number) => {
         setState((prevState) => {
             if (!prevState.data) return prevState;
+            //const media....
             return {
                 ...prevState,
                 data: {
                     ...prevState.data,
-                    media: prevState.data.media.map((m) => (m.id === mediaId ? { ...m, likes: m.likes + 1 } : m)),
+                    media: prevState.data.media.map((m) => (m.id === mediaId ? { ...m, likes: likeRef.current[mediaId] ? m.likes - 1 : m.likes + 1 } : m)),
                 },
             };
         });
+        likeRef.current[mediaId] = !likeRef.current[mediaId];
     };
 
     return (
