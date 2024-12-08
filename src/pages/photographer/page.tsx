@@ -101,6 +101,7 @@ const Photographer = () => {
         setState((prevState) => {
             if (!prevState.data) return prevState;
             //const media....
+            //const media....
             return {
                 ...prevState,
                 data: {
@@ -109,6 +110,7 @@ const Photographer = () => {
                 },
             };
         });
+        likeRef.current[mediaId] = !likeRef.current[mediaId];
         likeRef.current[mediaId] = !likeRef.current[mediaId];
     };
 
