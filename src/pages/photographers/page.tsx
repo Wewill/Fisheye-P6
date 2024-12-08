@@ -20,7 +20,6 @@ function Photographers() {
                 if (!response.ok) {
                     throw new Error(`HTTP Error status: ${response.status}`);
                 }
-                // console.log(response);
                 const data: Data = await response.json();
                 setState({ data, loading: false });
             } catch (error) {
