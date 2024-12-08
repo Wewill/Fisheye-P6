@@ -146,9 +146,9 @@ button:not([class]) {
     justify-content: center;
 }
 
-*:focus,
+/* *:focus,
 *:focus i {
     border: 1px blue solid !important;
     background-color: blue !important;
     color: blue !important;
-}
+} */
