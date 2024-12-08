@@ -54,7 +54,7 @@ const LightboxModal = ({
             document.removeEventListener('keydown', handleKeyDown);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [galleryId]); //onClose
+    }, [isOpen, galleryId]); //onClose
 
     const jumpGalleryID = (event: React.MouseEvent<HTMLButtonElement> | undefined, index: number | null = 0, direction: number = -1) => {
         if (event) event.preventDefault();
