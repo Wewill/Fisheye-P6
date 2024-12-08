@@ -12,6 +12,8 @@
     --primary-color: #901c1c;
     --secondary-color: #d3573c;
     --hover-color: #db8876;
+
+    --image-height: 350px;
 }
 
 a {
