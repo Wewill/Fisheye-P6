@@ -100,17 +100,15 @@ const Photographer = () => {
     const incrementLikes = (mediaId: number) => {
         setState((prevState) => {
             if (!prevState.data) return prevState;
-            //const media....
-            //const media....
+            const like = prevState.data.media.map((m) => (m.id === mediaId ? { ...m, likes: !likeRef.current[mediaId] ? m.likes - 1 : m.likes + 1 } : m));
             return {
                 ...prevState,
                 data: {
                     ...prevState.data,
-                    media: prevState.data.media.map((m) => (m.id === mediaId ? { ...m, likes: !likeRef.current[mediaId] ? m.likes - 1 : m.likes + 1 } : m)),
+                    media: like,
                 },
             };
         });
-        likeRef.current[mediaId] = !likeRef.current[mediaId];
         likeRef.current[mediaId] = !likeRef.current[mediaId];
     };
 
