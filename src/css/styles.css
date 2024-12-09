@@ -131,6 +131,10 @@ article .liked {
     overflow: hidden;
 }
 
+.no-scroll section section {
+    opacity: 0.5;
+}
+
 button:not([class]) {
     all: unset;
     display: inline-block;

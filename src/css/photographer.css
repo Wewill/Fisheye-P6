@@ -1,5 +1,5 @@
 .photographer_section {
-    margin: 100px;
+    margin: 60px 100px;
 }
 
 .photograph-header {
@@ -10,6 +10,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 55px;
+    border-radius: 10px;
 }
 
 .photograph-header h2 {
@@ -25,9 +26,16 @@
 
 .photograph-gallery {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 70px;
     margin-top: 100px;
+}
+
+@media screen and (max-width: 1600px) {
+    .photograph-gallery {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+    }
 }
 
 @media screen and (max-width: 1280px) {
@@ -173,6 +181,7 @@
 .photograph-filter .select .select-dropdown li {
     border-bottom: 1px solid white;
     padding: 10px;
+    cursor: pointer;
 }
 .photograph-filter .select .select-dropdown li:first-child {
     padding-top: 4px;
@@ -285,6 +294,10 @@
     right: 0;
 }
 
+#contact_modal form {
+    overflow-x: scroll;
+}
+
 .modal {
     border-radius: 5px;
     background-color: #db8876;
@@ -294,7 +307,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 35px;
-    margin: auto;
+    margin: 20px auto;
 }
 
 .modal header {
