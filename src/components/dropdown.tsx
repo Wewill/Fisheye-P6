@@ -21,7 +21,7 @@ const Dropdown = ({ get, set }: { get: string; set: React.Dispatch<React.SetStat
             <label id={'label-' + sortSelectId} htmlFor={sortSelectId}>
                 Trier par
             </label>
-            <div id={sortSelectId} className="select" tabIndex={0}>
+            <div id={sortSelectId} className="select" tabIndex={1}>
                 <button
                     className="select-button"
                     type="button"

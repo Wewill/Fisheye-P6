@@ -148,9 +148,18 @@ button:not([class]) {
     justify-content: center;
 }
 
+.space-x {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 /* *:focus,
 *:focus i {
     border: 1px blue solid !important;
     background-color: blue !important;
     color: blue !important;
 } */
+
+*:focus {
+    outline: 2px solid #d3573c;
+}

@@ -17,7 +17,7 @@ function App() {
     const state = useLocation();
     return (
         <BrowserRouterContext.Provider value={state}>
-            <header>
+            <header role="banner">
                 <Link to="/" tabIndex={0}>
                     <img src={fisheyeLogo} className="logo" alt="Fisheye Home page" />
                 </Link>

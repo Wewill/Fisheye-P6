@@ -48,6 +48,9 @@ function Photographers() {
 
     return (
         <>
+            <h2 id="section-title" className="visually-hidden">
+                Liste des photographes
+            </h2>
             {state.data?.photographers.map((photographer, index) => (
                 <article key={photographer.id} tabIndex={index + 1}>
                     <Link

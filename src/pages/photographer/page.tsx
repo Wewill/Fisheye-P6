@@ -114,7 +114,7 @@ const Photographer = () => {
 
     return (
         <article>
-            <section className="photograph-header">
+            <section id="section-title" className="photograph-header">
                 <div>
                     <hgroup>
                         <h2>{photographer?.name}</h2>
@@ -126,7 +126,7 @@ const Photographer = () => {
                         </p>
                     </hgroup>
                 </div>
-                <button className="contact_button" onClick={openContactModal} aria-label="Contact Me">
+                <button className="contact_button space-x" onClick={openContactModal} aria-label="Contact Me" tabIndex={99}>
                     Contactez-moi
                 </button>
                 <img src={`./photographers/${photographer?.portrait}`} alt={photographer?.name} />
@@ -139,8 +139,8 @@ const Photographer = () => {
             <section className="photograph-gallery">
                 {sortedMedias
                     .filter((m) => m.photographerId === photographerId)
-                    .map((media) => (
-                        <figure key={media.id}>
+                    .map((media, index) => (
+                        <figure key={media.id} tabIndex={index + 2}>
                             <button type="button" onClick={() => openLightboxModal(media.id)} aria-label={'Voir en détail : ' + media.title}>
                                 {media.image && <img src={`./medias/${photographerId}/${media.image}`} alt={media.title} />}
                                 {media.video && (

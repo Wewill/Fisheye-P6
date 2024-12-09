@@ -11,7 +11,11 @@ type Props = {
 const Route = ({ path, children, className }: Props) => {
     const context = React.useContext(BrowserRouterContext);
     if (context.currentPath !== path) return null;
-    return <div className={className}>{children}</div>;
+    return (
+        <section className={className} aria-labelledby="section-title">
+            {children}
+        </section>
+    );
 };
 
 export default Route;

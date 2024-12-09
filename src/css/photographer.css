@@ -30,6 +30,20 @@
     margin-top: 100px;
 }
 
+@media screen and (max-width: 1280px) {
+    .photograph-gallery {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .photograph-gallery {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+    }
+}
+
 .photograph-gallery figure {
     justify-self: center;
     display: flex;
