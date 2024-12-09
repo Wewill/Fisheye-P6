@@ -58,9 +58,14 @@ label:not([class]) {
     font-size: 26px;
 }
 
+.logo-wrapper {
+    position: relative;
+    left: 100px;
+}
+
 .logo {
     height: 50px;
-    margin-left: 100px;
+    /* margin-left: 100px; */
 }
 
 .error,
@@ -160,6 +165,6 @@ button:not([class]) {
     color: blue !important;
 } */
 
-*:focus {
+/* *:focus:not(:active) {
     outline: 2px solid #d3573c;
-}
+} */
