@@ -1,17 +1,15 @@
-import Route from './components/route';
-import Link from './components/link';
-import useLocation from './router/use-location';
-
-// Assets
-import fisheyeLogo from './assets/images/logo.png';
-import Photographers from './pages/photographers/page';
-import Photographer from './pages/photographer/page';
-
 // Styles
 import './css/styles.css';
 import './css/photographers.css';
 import './css/photographer.css';
+import fisheyeLogo from './assets/images/logo.png';
+
+import useLocation from './router/use-location';
 import BrowserRouterContext from './router/context';
+import Route from './components/route';
+import Link from './components/link';
+import Photographers from './pages/photographers/page';
+import Photographer from './pages/photographer/page';
 
 function App() {
     const state = useLocation();

@@ -1,4 +1,3 @@
-// @src/components/Link.jsx
 import React from 'react';
 
 type Props = {

@@ -20,7 +20,7 @@ const useLocation = () => {
         window.addEventListener('navigate', onLocationChange);
         return () => {
             window.removeEventListener('navigate', onLocationChange);
-        }; // Pourquoi on doit mettre le remove dans le retour de la function ? Lancer la function au démontage
+        }; // Lancer la fonction au démontage du composant
     }, []); // Tableau de dépendances vide pour n’exécuter l’effet qu'une fois après le rendu du composant
 
     return state;

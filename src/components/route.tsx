@@ -1,4 +1,3 @@
-// @src/components/Route.jsx
 import * as React from 'react';
 import BrowserRouterContext from '../router/context';
 
